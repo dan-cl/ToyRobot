@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToyRobot.App.Map
+namespace ToyRobot.App.Table
 {
-    public class MapCommandValidator
+    public class TableCommandValidator
     {
 
     }
