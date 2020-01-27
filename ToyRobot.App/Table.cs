@@ -1,17 +1,16 @@
 ﻿using System;
-using ToyRobot.App;
+using System.Linq;
+
 
 namespace ToyRobot.App
 {
     public class Table
     {
-        private int _xAxisLimit;
-        private int _yAxisLimit;
+        private readonly int _tableSize;
 
         public Table()
         {
-            _xAxisLimit = 5;
-            _yAxisLimit = 5;
+            _tableSize = 5;
         }
 
         public bool Move(Robot robot)
@@ -19,9 +18,18 @@ namespace ToyRobot.App
             return true;
         }
 
-        public bool Place(int[] position, string heading, Robot robot)
+        public bool Place(int[] position, IRobot robot)
         {
+            if (!ValidPosition(position)) return false;
+
+            robot.Position = position;
+            robot.Placed = true;
             return true;
+        }
+         
+        private bool ValidPosition(int[] position)
+        {
+            return position.All(value => value >= 0 && _tableSize >= value);
         }
     }
 }

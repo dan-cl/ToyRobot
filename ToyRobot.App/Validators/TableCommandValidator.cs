@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToyRobot.App.Table
+namespace ToyRobot.App.Validators
 {
     public class TableCommandValidator
     {
