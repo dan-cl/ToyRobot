@@ -18,19 +18,13 @@ namespace ToyRobot.App
 
         public delegate bool MoveMethodDelegate(IRobot robot);
 
-        public Dictionary<string, Delegate> MoveMethods;
+        public Dictionary<string, Delegate> MoveMethodDelegateBindings;
 
         public Table()
         {
             _tableSize = TableSizeConstants.TableSize;
 
-            MoveMethods = new Dictionary<string, Delegate>
-            {
-                {HeadingConstants.North, new MoveMethodDelegate(MoveNorth) },
-                {HeadingConstants.East, new MoveMethodDelegate(MoveEast) },
-                {HeadingConstants.South, new MoveMethodDelegate(MoveSouth) },
-                {HeadingConstants.West, new MoveMethodDelegate(MoveWest) },
-            };
+            MoveMethodDelegateBindings = bindHeadingMethodDelegates();
         }
 
         public bool Move(IRobot robot)
@@ -62,15 +56,19 @@ namespace ToyRobot.App
 
         private bool ValidHeading(string robotHeading, out MoveMethodDelegate moveMethodDelegate)
         {
+            //iterate through valid headings to check robot heading is valid
             foreach (var headingString in HeadingConstants.HeadingStrings)
             {
                 if (robotHeading != headingString) continue;
 
-                moveMethodDelegate = MoveMethods[headingString] as MoveMethodDelegate;
+                //if robot heading is valid select corresponding move method
+                moveMethodDelegate = MoveMethodDelegateBindings[headingString] as MoveMethodDelegate;
                 return true;
             }
 
             moveMethodDelegate = null;
+
+            //if no match found return false
             return false;
         }
 
@@ -83,6 +81,7 @@ namespace ToyRobot.App
 
         private bool MoveEast(IRobot robot)
         {
+            //set axis and direction of move
             var axis = 0;
             var velocity = 1;
             return ChangeCoordinate(robot, axis, velocity);
@@ -107,10 +106,20 @@ namespace ToyRobot.App
             var newPosition = (int[])robot.Position.Clone();
             newPosition[axis] += velocity;
 
+            //check if new position will be valid
             if (!ValidPosition(newPosition)) return false;
 
             robot.Position[axis] += velocity;
             return true;
         }
+
+        private Dictionary<string, Delegate> bindHeadingMethodDelegates() =>
+            new Dictionary<string, Delegate>
+            {
+                {HeadingConstants.North, new MoveMethodDelegate(MoveNorth) },
+                {HeadingConstants.East, new MoveMethodDelegate(MoveEast) },
+                {HeadingConstants.South, new MoveMethodDelegate(MoveSouth) },
+                {HeadingConstants.West, new MoveMethodDelegate(MoveWest) },
+            };
     }
 }

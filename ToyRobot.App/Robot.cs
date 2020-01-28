@@ -36,11 +36,14 @@ namespace ToyRobot.App
         public void TurnLeft()
         {
             var currentCompassIndex = GetCurrentCompassIndex(Heading);
+
+            //select previous compass heading or jump to end of list
             Heading = currentCompassIndex == 0 ? _compass.Last() : _compass[currentCompassIndex - 1];
         }
 
         public void TurnRight()
         {
+            //select next compass heading or jump to start of list
             var currentCompassIndex = GetCurrentCompassIndex(Heading);
             Heading = currentCompassIndex == (_compass.Count - 1) ? _compass.First() : _compass[currentCompassIndex + 1];
         }

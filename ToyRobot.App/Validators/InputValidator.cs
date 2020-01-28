@@ -79,14 +79,14 @@ namespace ToyRobot.App.Validators
 
             _robot.Heading = heading;
 
-            if (_table.Place(position, _robot))
-            {
-                var xCoordinate = position[0];
-                var yCoordinate = position[1];
-                return $"Robot placed at {xCoordinate}, {yCoordinate} facing {heading}";
-            }
+            if (!_table.Place(position, _robot))
+                return UserMessageConstants.CannotPlaceRobot;
+            
+            //return message to user if placement was successful
+            var xCoordinate = position[0];
+            var yCoordinate = position[1];
+            return $"Robot placed at {xCoordinate}, {yCoordinate} facing {heading}";
 
-            return UserMessageConstants.CannotPlaceRobot;
         }
 
         private string Move()
@@ -134,24 +134,33 @@ namespace ToyRobot.App.Validators
             heading = null;
             position = null;
 
+            //split PLACE command from position and heading arguments
             var commandAndArguments = placeCommand.Split(" ");
+            
             if (commandAndArguments.Length < 2)
                 return false;
 
+            //select position and heading
             var positionAndHeading = commandAndArguments[1];
+
+            //split x coordinate, y coordinate and heading
             var positionAndHeadingArray = positionAndHeading?.Split(",");
 
+            //check if all coordinates and heading present
             if (positionAndHeadingArray?.Length < 3)
                 return false;
 
+            //check x coordinate is an int
             if (!int.TryParse(positionAndHeadingArray?[0], out int xCoordinate))
                 return false;
 
+            //check y coordinate is an int
             if (!int.TryParse(positionAndHeadingArray?[1], out int yCoordinate))
                 return false;
 
             heading = positionAndHeadingArray?[2].ToUpper();
 
+            //check heading is valid
             if (!HeadingConstants.HeadingStrings.Contains(heading))
                 return false;
 
