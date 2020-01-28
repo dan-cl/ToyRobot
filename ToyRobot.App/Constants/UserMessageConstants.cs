@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToyRobot.App.Constants
+﻿namespace ToyRobot.App.Constants
 {
     public class UserMessageConstants
     {

@@ -24,7 +24,7 @@ namespace ToyRobot.App.Validators
         public string ValidateInput(string input)
         {
             Delegate commandDelegate = null;
-            var inputCommand = input.Split(" ")[0];
+            var inputCommand = input.Split(" ")[0].ToUpper();
 
             foreach (var command in CommandConstants.CommandStrings)
             {
@@ -61,15 +61,23 @@ namespace ToyRobot.App.Validators
 
         private string Place(string input)
         {
-            var positionAndHeading = input.Split(" ")[1];
-
-            if (!int.TryParse(positionAndHeading?.Split(",")[0], out int xCoordinate))
+            var commandAndArguments = input.Split(" ");
+            if (commandAndArguments.Length < 2)
                 return UnknownCommand();
 
-            if (!int.TryParse(positionAndHeading?.Split(",")[1], out int yCoordinate))
+            var positionAndHeading = commandAndArguments[1];
+            var positionAndHeadingArray = positionAndHeading?.Split(",");
+
+            if (positionAndHeadingArray?.Length < 3)
                 return UnknownCommand();
 
-            var heading = positionAndHeading?.Split(",")[2].ToUpper();
+            if (!int.TryParse(positionAndHeadingArray?[0], out int xCoordinate))
+                return UnknownCommand();
+
+            if (!int.TryParse(positionAndHeadingArray?[1], out int yCoordinate))
+                return UnknownCommand();
+
+            var heading = positionAndHeadingArray?[2].ToUpper();
 
             if (!HeadingConstants.HeadingStrings.Contains(heading))
                 return UnknownCommand();
