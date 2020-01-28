@@ -98,8 +98,10 @@ namespace ToyRobot.App.Validators
 
         private string Move()
         {
-            _table.Move(_robot);
-            return UserMessageConstants.RobotMoved;
+            if(_table.Move(_robot))
+                return UserMessageConstants.RobotMoved;
+
+            return UserMessageConstants.CannotMoveRobot;
         }
 
         private string Left()
