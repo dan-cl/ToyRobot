@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using ToyRobot.App;
+using ToyRobot.App.Constants;
 using Xunit;
 
 namespace ToyRobot.Test
@@ -177,19 +178,19 @@ namespace ToyRobot.Test
             public static IEnumerable<object[]> GetValidMoveTestDataWithFinishPosition =>
                 new List<object[]>
                 {
-                    new object[] { new[]{0, 0}, Constants.North, new[]{0, 1} },
-                    new object[] { new[]{0, 0}, Constants.East,  new[]{1, 0} },
-                    new object[] { new[]{0, 1}, Constants.South, new[]{0, 0} },
-                    new object[] { new[]{1, 0}, Constants.West,  new[]{0, 0} }
+                    new object[] { new[]{0, 0}, HeadingConstants.North, new[]{0, 1} },
+                    new object[] { new[]{0, 0}, HeadingConstants.East,  new[]{1, 0} },
+                    new object[] { new[]{0, 1}, HeadingConstants.South, new[]{0, 0} },
+                    new object[] { new[]{1, 0}, HeadingConstants.West,  new[]{0, 0} }
                 };
 
             public static IEnumerable<object[]> GetValidMoveTestDataWithOutFinishPosition =>
                 new List<object[]>
                 {
-                    new object[] { new[]{0, 0}, Constants.North},
-                    new object[] { new[]{0, 0}, Constants.East},
-                    new object[] { new[]{0, 1}, Constants.South},
-                    new object[] { new[]{1, 0}, Constants.West}
+                    new object[] { new[]{0, 0}, HeadingConstants.North},
+                    new object[] { new[]{0, 0}, HeadingConstants.East},
+                    new object[] { new[]{0, 1}, HeadingConstants.South},
+                    new object[] { new[]{1, 0}, HeadingConstants.West}
                 };
 
 
@@ -200,10 +201,10 @@ namespace ToyRobot.Test
 
                 return new List<object[]>
                 {
-                    new object[] { new[] {0, yCoordinateMaxValue}, Constants.North},
-                    new object[] { new[] {xCoordinateMaxValue, 0}, Constants.East},
-                    new object[] { new[] {0, 0}, Constants.South},
-                    new object[] { new[] {0, 0}, Constants.West}
+                    new object[] { new[] {0, yCoordinateMaxValue}, HeadingConstants.North},
+                    new object[] { new[] {xCoordinateMaxValue, 0}, HeadingConstants.East},
+                    new object[] { new[] {0, 0}, HeadingConstants.South},
+                    new object[] { new[] {0, 0}, HeadingConstants.West}
                 };
 
                 

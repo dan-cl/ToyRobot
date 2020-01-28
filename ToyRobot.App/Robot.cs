@@ -1,5 +1,6 @@
 ﻿using System;
 using ToyRobot.App;
+using ToyRobot.App.Constants;
 
 namespace ToyRobot.App
 {
@@ -9,6 +10,8 @@ namespace ToyRobot.App
         string Heading { get; set; }
         bool Placed { get; set; }
         string Report();
+        void TurnLeft();
+        void TurnRight();
     }
 
     public class Robot : IRobot
@@ -17,9 +20,25 @@ namespace ToyRobot.App
         public string Heading { get; set; }
         public bool Placed { get; set; }
 
+        public Robot()
+        {
+            Placed = false;
+        }
+
         public string Report()
         {
-            return $"{Position[0]},{Position[1]},{Heading}";
+            return Placed ? $"{Position[0]},{Position[1]},{Heading}" : UserMessageConstants.RobotNotPlaced;
         }
+
+        public void TurnLeft()
+        {
+
+        }
+
+        public void TurnRight()
+        {
+
+        }
+
     }
 }

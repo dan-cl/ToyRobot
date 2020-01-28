@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace ToyRobot.App
+﻿namespace ToyRobot.App.Constants
 {
-    public static class Constants
+
+    public static class HeadingConstants
     {
          public const string North = "NORTH";
          public const string East = "EAST";
@@ -12,10 +9,5 @@ namespace ToyRobot.App
          public const string West = "WEST";
 
          public static string[] HeadingStrings = {North, East, South, West};
-    }
-
-    public static class TableSizeConstants
-    {
-        public const int TableSize = 5;
     }
 }

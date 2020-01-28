@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ToyRobot.App.Constants;
 
 
 namespace ToyRobot.App
 {
-    public class Table
+    public interface ITable
+    {
+        bool Move(IRobot robot);
+        bool Place(int[] position, IRobot robot);
+    }
+
+    public class Table : ITable
     {
         private readonly int _tableSize;
 
@@ -17,22 +24,24 @@ namespace ToyRobot.App
         {
             _tableSize = TableSizeConstants.TableSize;
 
-            MoveMethods = new Dictionary<string, Delegate>()
+            MoveMethods = new Dictionary<string, Delegate>
             {
-                {Constants.North, new MoveMethodDelegate(MoveNorth) },
-                {Constants.East, new MoveMethodDelegate(MoveEast) },
-                {Constants.South, new MoveMethodDelegate(MoveSouth) },
-                {Constants.West, new MoveMethodDelegate(MoveWest) },
+                {HeadingConstants.North, new MoveMethodDelegate(MoveNorth) },
+                {HeadingConstants.East, new MoveMethodDelegate(MoveEast) },
+                {HeadingConstants.South, new MoveMethodDelegate(MoveSouth) },
+                {HeadingConstants.West, new MoveMethodDelegate(MoveWest) },
             };
         }
 
         public bool Move(IRobot robot)
         {
+            if (!robot.Placed) return false;
+
             if(!ValidPosition(robot.Position)) return false;
 
             if (!ValidHeading(robot.Heading, out var moveMethodDelegate)) return false;
 
-            return moveMethodDelegate(robot);
+            return moveMethodDelegate?.Invoke(robot) ?? false;
         }
 
         public bool Place(int[] position, IRobot robot)
@@ -53,7 +62,7 @@ namespace ToyRobot.App
 
         private bool ValidHeading(string robotHeading, out MoveMethodDelegate moveMethodDelegate)
         {
-            foreach (var headingString in Constants.HeadingStrings)
+            foreach (var headingString in HeadingConstants.HeadingStrings)
             {
                 if (robotHeading != headingString) continue;
 
