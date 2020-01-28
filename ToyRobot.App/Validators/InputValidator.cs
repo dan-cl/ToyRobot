@@ -10,9 +10,11 @@ namespace ToyRobot.App.Validators
         private IRobot _robot;
         private ITable _table;
 
-        private delegate string PlaceCommandMethodDelegate(string input);
+        private delegate string PlaceRobotCommandMethod(string input);
 
-        private delegate string CommandMethodDelegate();
+        private delegate string RobotCommandMethod();
+
+        private delegate string MenuCommandMethod();
 
         private Dictionary<string, Delegate> CommandMethods => BindDelegates;
 
@@ -39,10 +41,12 @@ namespace ToyRobot.App.Validators
             {
                 case null:
                     return UnknownCommand();
-                case PlaceCommandMethodDelegate placeMethod:
-                    return placeMethod(input);
-                case CommandMethodDelegate method:
-                    return method();
+                case PlaceRobotCommandMethod placeRobotMethod:
+                    return placeRobotMethod(input);
+                case RobotCommandMethod robotMethod:
+                    return _robot.Placed ? robotMethod() : UserMessageConstants.RobotNotPlaced;
+                case MenuCommandMethod menuMethod:
+                    return menuMethod();
                 default:
                     return UnknownCommand();
             }
@@ -51,12 +55,13 @@ namespace ToyRobot.App.Validators
         private Dictionary<string, Delegate> BindDelegates =>
             new Dictionary<string, Delegate>()
             {
-                {CommandConstants.Place, new PlaceCommandMethodDelegate(Place)},
-                {CommandConstants.Move, new CommandMethodDelegate(Move)},
-                {CommandConstants.Left, new CommandMethodDelegate(Left)},
-                {CommandConstants.Right, new CommandMethodDelegate(Right)},
-                {CommandConstants.Report, new CommandMethodDelegate(Report)},
-                {CommandConstants.Exit, new CommandMethodDelegate(Exit) }
+                {CommandConstants.Place, new PlaceRobotCommandMethod(Place)},
+                {CommandConstants.Move, new RobotCommandMethod(Move)},
+                {CommandConstants.Left, new RobotCommandMethod(Left)},
+                {CommandConstants.Right, new RobotCommandMethod(Right)},
+                {CommandConstants.Report, new RobotCommandMethod(Report)},
+                {CommandConstants.Exit, new MenuCommandMethod(Exit) },
+                {CommandConstants.Help, new MenuCommandMethod(Help) }
             };
 
         private string Place(string input)
@@ -88,7 +93,6 @@ namespace ToyRobot.App.Validators
             if (_table.Place(position, _robot))
                 return $"Robot placed at {xCoordinate}, {yCoordinate} facing {heading}";
 
-
             return UserMessageConstants.CannotPlaceRobot;
         }
 
@@ -119,6 +123,12 @@ namespace ToyRobot.App.Validators
         {
             return UserMessageConstants.Exit;
         }
+
+        private string Help()
+        {
+            return UserMessageConstants.HelpMessage;
+        }
+
 
         private string UnknownCommand()
         {

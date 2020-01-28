@@ -91,6 +91,48 @@ namespace ToyRobot.Test
         }
 
         [Theory]
+        [InlineData("MOVE")]
+        [InlineData("LEFT")]
+        [InlineData("RIGHT")]
+        [InlineData("REPORT")]
+        public void ValidateInput_GivenValidRobotCommandBeforeRobotPlaced_ReturnsRobotNotPlacedMessage(string validRobotCommand)
+        {
+            //Arrange
+            var tableMock = GetTableMock();
+            var robotMock = new Mock<IRobot>();
+            var inputValidator = GetInputValidator(robotMock.Object, tableMock.Object);
+
+            var expected = UserMessageConstants.RobotNotPlaced;
+
+            //Act
+            var result = inputValidator.ValidateInput(validRobotCommand);
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Theory]
+        [InlineData(CommandConstants.Help, UserMessageConstants.HelpMessage)]
+        [InlineData(CommandConstants.Exit, UserMessageConstants.Exit)]
+        public void ValidateInput_GivenValidMenuCommandBeforeRobotPlaced_ReturnsMenuMessage(string validRobotCommand, string menuMessage)
+        {
+            //Arrange
+            var tableMock = GetTableMock();
+            var robotMock = new Mock<IRobot>();
+            var inputValidator = GetInputValidator(robotMock.Object, tableMock.Object);
+
+            var expected = menuMessage;
+
+            //Act
+            var result = inputValidator.ValidateInput(validRobotCommand);
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+
+
+
+        [Theory]
         [InlineData("move")]
         [InlineData("MOVE")]
         public void ValidateInput_GivenMoveCommand_MovesTheRobot(string moveCommand)
@@ -222,6 +264,22 @@ namespace ToyRobot.Test
             Assert.Equal(expected, result);
         }
 
+        [Theory]
+        [InlineData("help")]
+        [InlineData("HELP")]
+        public void ValidateInput_GivenHelpCommand_ReturnsHelpMessage(string helpCommand)
+        {
+            //Arrange
+            var inputValidator = GetInputValidator();
+            var expected = UserMessageConstants.HelpMessage;
+
+            //Act
+            var result = inputValidator.ValidateInput(helpCommand);
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+
 
 
         public static IEnumerable<object[]> GetValidPlaceCommands =>
@@ -235,7 +293,9 @@ namespace ToyRobot.Test
 
         private Mock<IRobot> GetRobotMock()
         {
-            return new Mock<IRobot>();
+            var robotMock = new Mock<IRobot>();
+            robotMock.Setup(x => x.Placed).Returns(true);
+            return robotMock;
         }
 
         private Mock<ITable> GetTableMock()
@@ -250,9 +310,7 @@ namespace ToyRobot.Test
 
         private InputValidator GetInputValidator()
         {
-            var robotMock = new Mock<IRobot>();
-            var tableMock = new Mock<ITable>();
-            return GetInputValidator(robotMock.Object, tableMock.Object);
+            return GetInputValidator(GetRobotMock().Object, GetTableMock().Object);
         }
     }
 }
