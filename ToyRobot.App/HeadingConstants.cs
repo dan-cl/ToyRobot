@@ -1,6 +1,6 @@
 ﻿namespace ToyRobot.App
 {
-    public static class Constants
+    public static class HeadingConstants
     {
          public const string North = "NORTH";
          public const string East = "EAST";

@@ -13,14 +13,22 @@ namespace ToyRobot.App
 
             var robot = new Robot();
             var table = new Table();
-            //var inputValidator = new InputValidator();
+            var inputValidator = new InputValidator(robot, table);
             var exit = false;
 
             while (!exit)
             {
                 var input = Console.ReadLine();
-                InputValidator.ValidateInput(input);
+                var outPut = inputValidator.ValidateInput(input);
+
                 
+
+                if (outPut == "EXIT")
+                    exit = true;
+                else
+                {
+                    Console.WriteLine(outPut);
+                }
 
             }
 

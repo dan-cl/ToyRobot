@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ToyRobot.App.Validators
@@ -60,37 +61,60 @@ namespace ToyRobot.App.Validators
 
         private string Place(string input)
         {
-            return "";
+            var positionAndHeading = input.Split(" ")[1];
+
+            if (!int.TryParse(positionAndHeading?.Split(",")[0], out int xCoordinate))
+                return UnknownCommand();
+
+            if (!int.TryParse(positionAndHeading?.Split(",")[1], out int yCoordinate))
+                return UnknownCommand();
+
+            var heading = positionAndHeading?.Split(",")[2].ToUpper();
+
+            if (!HeadingConstants.HeadingStrings.Contains(heading))
+                return UnknownCommand();
+
+            _robot.Heading = heading;
+            var position = new int[] {xCoordinate, yCoordinate};
+
+            if (_table.Place(position, _robot))
+                return $"Robot placed at {xCoordinate}, {yCoordinate} facing {heading}";
+
+
+            return "Can't place robot outside of table";
         }
 
         private string Move()
         {
-            return "";
+            _table.Move(_robot);
+            return "robot moved";
         }
 
         private string Left()
         {
-            return "";
+            _robot.TurnLeft();
+            return "robot turned left";
         }
 
         private string Right()
         {
-            return "";
+            _robot.TurnRight();
+            return "robot turned right";
         }
 
         private string Report()
         {
-            return "";
+            return _robot.Report();
         }
 
         private string Exit()
         {
-            return "";
+            return "EXIT";
         }
 
         private string UnknownCommand()
         {
-            return "";
+            return "Unknown command";
         }
     }
 }

@@ -19,9 +19,14 @@ namespace ToyRobot.App
         public string Heading { get; set; }
         public bool Placed { get; set; }
 
+        public Robot()
+        {
+            Placed = false;
+        }
+
         public string Report()
         {
-            return $"{Position[0]},{Position[1]},{Heading}";
+            return Placed ? $"{Position[0]},{Position[1]},{Heading}" : "Robot has not been placed";
         }
 
         public void TurnLeft()

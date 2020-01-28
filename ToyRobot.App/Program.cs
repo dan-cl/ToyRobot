@@ -6,7 +6,8 @@ namespace ToyRobot.App
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+           var userInterface = new UserInterface();
+           userInterface.Start();
         }
     }
 }
