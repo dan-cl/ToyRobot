@@ -14,6 +14,7 @@
         public const string RobotNotPlaced = "Robot has not been placed\n\n\n";
         public const string CannotPlaceRobot = "Can't place robot outside of table\n\n\n";
         public const string RobotMoved = "Robot moved\n\n\n";
+        public const string CannotMoveRobot = "Robot cannot move off the edge of the table\n\n\n";
         public const string TurnedLeft = "Robot turned left\n\n\n";
         public const string TurnedRight = "Robot turned right\n\n\n";
         public const string Exit = "EXIT";

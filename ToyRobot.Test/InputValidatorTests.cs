@@ -152,10 +152,13 @@ namespace ToyRobot.Test
         [Theory]
         [InlineData("move")]
         [InlineData("MOVE")]
-        public void ValidateInput_GivenMoveCommand_ReturnsRobotMovedMessage(string moveCommand)
+        public void ValidateInput_GivenMoveCommand_ReturnsRobotMovedMessageIfRobotMoved(string moveCommand)
         {
             //Arrange
-            var inputValidator = GetInputValidator();
+            var tableMock = GetTableMock();
+            var robotMock = GetRobotMock();
+            tableMock.Setup(x => x.Move(robotMock.Object)).Returns(true);
+            var inputValidator = GetInputValidator(robotMock.Object, tableMock.Object);
             var expected = UserMessageConstants.RobotMoved;
 
             //Act
@@ -164,6 +167,26 @@ namespace ToyRobot.Test
             //Assert
             Assert.Equal(expected, result);
         }
+
+        [Theory]
+        [InlineData("move")]
+        [InlineData("MOVE")]
+        public void ValidateInput_GivenMoveCommand_ReturnsRobotNotMovedIfRobotDidNotMove(string moveCommand)
+        {
+            //Arrange
+            var tableMock = GetTableMock();
+            var robotMock = GetRobotMock();
+            tableMock.Setup(x => x.Move(robotMock.Object)).Returns(false);
+            var inputValidator = GetInputValidator(robotMock.Object, tableMock.Object);
+            var expected = UserMessageConstants.CannotMoveRobot;
+
+            //Act
+            var result = inputValidator.ValidateInput(moveCommand);
+
+            //Assert
+            Assert.Equal(expected, result);
+        }
+
 
         [Theory]
         [InlineData("left")]
