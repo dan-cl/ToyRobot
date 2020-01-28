@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using ToyRobot.App;
 using ToyRobot.App.Constants;
 
 namespace ToyRobot.App

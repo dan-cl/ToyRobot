@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ToyRobot.App
+﻿namespace ToyRobot.App
 {
     class Program
     {

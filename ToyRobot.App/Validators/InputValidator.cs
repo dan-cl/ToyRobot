@@ -16,23 +16,26 @@ namespace ToyRobot.App.Validators
 
         private delegate string MenuCommandMethod();
 
-        private Dictionary<string, Delegate> CommandMethods => BindDelegates;
+        private Dictionary<string, Delegate> CommandMethodsDelegates => BindDelegates;
 
         public InputValidator(IRobot robot, ITable table)
         {
             _robot = robot;
             _table = table;
         }
+
         public string ValidateInput(string input)
         {
             Delegate commandDelegate = null;
             var inputCommand = input.Split(" ")[0].ToUpper();
 
+            //iterate though list of commands to match user input to command
             foreach (var command in CommandConstants.CommandStrings)
             {
+                //if a match is found use the command as key to select the method associated to that command in the dictionary of method delegates
                 if (inputCommand == command)
                 {
-                    commandDelegate = CommandMethods[command];
+                    commandDelegate = CommandMethodsDelegates[command];
                     break;
                 }
             }
@@ -41,17 +44,22 @@ namespace ToyRobot.App.Validators
             {
                 case null:
                     return UnknownCommand();
+                //if command was a 'PLACE' command, call the place method passing the user input
                 case PlaceRobotCommandMethod placeRobotMethod:
                     return placeRobotMethod(input);
+                //if command was a 'LEFT', 'RIGHT', 'MOVE' etc. command, call appropriate method
                 case RobotCommandMethod robotMethod:
                     return _robot.Placed ? robotMethod() : UserMessageConstants.RobotNotPlaced;
+                //if command was a command, call appropriate method
                 case MenuCommandMethod menuMethod:
                     return menuMethod();
+                //if command was unknown
                 default:
                     return UnknownCommand();
             }
         }
 
+        //assign methods to command inputs
         private Dictionary<string, Delegate> BindDelegates =>
             new Dictionary<string, Delegate>()
             {
@@ -66,32 +74,17 @@ namespace ToyRobot.App.Validators
 
         private string Place(string input)
         {
-            var commandAndArguments = input.Split(" ");
-            if (commandAndArguments.Length < 2)
-                return UnknownCommand();
-
-            var positionAndHeading = commandAndArguments[1];
-            var positionAndHeadingArray = positionAndHeading?.Split(",");
-
-            if (positionAndHeadingArray?.Length < 3)
-                return UnknownCommand();
-
-            if (!int.TryParse(positionAndHeadingArray?[0], out int xCoordinate))
-                return UnknownCommand();
-
-            if (!int.TryParse(positionAndHeadingArray?[1], out int yCoordinate))
-                return UnknownCommand();
-
-            var heading = positionAndHeadingArray?[2].ToUpper();
-
-            if (!HeadingConstants.HeadingStrings.Contains(heading))
-                return UnknownCommand();
+            if (!validatePlaceCommand(input, out var heading, out var position))
+                return UserMessageConstants.UnknownCommand;
 
             _robot.Heading = heading;
-            var position = new int[] {xCoordinate, yCoordinate};
 
             if (_table.Place(position, _robot))
+            {
+                var xCoordinate = position[0];
+                var yCoordinate = position[1];
                 return $"Robot placed at {xCoordinate}, {yCoordinate} facing {heading}";
+            }
 
             return UserMessageConstants.CannotPlaceRobot;
         }
@@ -131,10 +124,40 @@ namespace ToyRobot.App.Validators
             return UserMessageConstants.HelpMessage;
         }
 
-
         private string UnknownCommand()
         {
             return UserMessageConstants.UnknownCommand;
+        }
+
+        private bool validatePlaceCommand(string placeCommand, out string heading, out int[] position)
+        {
+            heading = null;
+            position = null;
+
+            var commandAndArguments = placeCommand.Split(" ");
+            if (commandAndArguments.Length < 2)
+                return false;
+
+            var positionAndHeading = commandAndArguments[1];
+            var positionAndHeadingArray = positionAndHeading?.Split(",");
+
+            if (positionAndHeadingArray?.Length < 3)
+                return false;
+
+            if (!int.TryParse(positionAndHeadingArray?[0], out int xCoordinate))
+                return false;
+
+            if (!int.TryParse(positionAndHeadingArray?[1], out int yCoordinate))
+                return false;
+
+            heading = positionAndHeadingArray?[2].ToUpper();
+
+            if (!HeadingConstants.HeadingStrings.Contains(heading))
+                return false;
+
+            position = new int[] { xCoordinate, yCoordinate };
+
+            return true;
         }
     }
 }
