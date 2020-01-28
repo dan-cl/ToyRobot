@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using ToyRobot.App.Constants;
 using ToyRobot.App.Validators;
 
@@ -10,6 +8,7 @@ namespace ToyRobot.App
     {
         public void Start()
         {
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             Console.WriteLine(UserMessageConstants.WelcomeMessage);
             Console.WriteLine(UserMessageConstants.HelpMessage);
 

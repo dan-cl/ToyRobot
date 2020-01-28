@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ToyRobot.App;
 using ToyRobot.App.Constants;
 
@@ -20,9 +22,12 @@ namespace ToyRobot.App
         public string Heading { get; set; }
         public bool Placed { get; set; }
 
+        private List<string> _compass;
+
         public Robot()
         {
             Placed = false;
+            SetupCompass();
         }
 
         public string Report()
@@ -32,13 +37,30 @@ namespace ToyRobot.App
 
         public void TurnLeft()
         {
-
+            var currentCompassIndex = GetCurrentCompassIndex(Heading);
+            Heading = currentCompassIndex == 0 ? _compass.Last() : _compass[currentCompassIndex - 1];
         }
 
         public void TurnRight()
         {
-
+            var currentCompassIndex = GetCurrentCompassIndex(Heading);
+            Heading = currentCompassIndex == (_compass.Count - 1) ? _compass.First() : _compass[currentCompassIndex + 1];
         }
 
+        private void SetupCompass()
+        {
+            _compass = new List<string>
+            {
+                HeadingConstants.North,
+                HeadingConstants.East,
+                HeadingConstants.South,
+                HeadingConstants.West
+            };
+        }
+
+        private int GetCurrentCompassIndex(string heading)
+        {
+            return _compass.FindIndex(x => x.StartsWith(heading));
+        }
     }
 }
