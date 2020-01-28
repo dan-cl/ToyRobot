@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ToyRobot.App.
+namespace ToyRobot.App.Validators
+
 {
     class RobotCommandValidator
     {
