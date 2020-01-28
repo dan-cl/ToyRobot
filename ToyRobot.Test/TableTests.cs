@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using ToyRobot.App;
+using ToyRobot.App.Constants;
 using Xunit;
 
 namespace ToyRobot.Test

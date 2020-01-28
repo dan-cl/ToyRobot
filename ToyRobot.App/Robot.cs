@@ -1,5 +1,6 @@
 ﻿using System;
 using ToyRobot.App;
+using ToyRobot.App.Constants;
 
 namespace ToyRobot.App
 {
@@ -26,7 +27,7 @@ namespace ToyRobot.App
 
         public string Report()
         {
-            return Placed ? $"{Position[0]},{Position[1]},{Heading}" : "Robot has not been placed";
+            return Placed ? $"{Position[0]},{Position[1]},{Heading}" : UserMessageConstants.RobotNotPlaced;
         }
 
         public void TurnLeft()

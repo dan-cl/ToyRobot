@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using ToyRobot.App.Constants;
 
 namespace ToyRobot.App.Validators
 {
@@ -81,25 +81,25 @@ namespace ToyRobot.App.Validators
                 return $"Robot placed at {xCoordinate}, {yCoordinate} facing {heading}";
 
 
-            return "Can't place robot outside of table";
+            return UserMessageConstants.CannotPlaceRobot;
         }
 
         private string Move()
         {
             _table.Move(_robot);
-            return "robot moved";
+            return UserMessageConstants.RobotMoved;
         }
 
         private string Left()
         {
             _robot.TurnLeft();
-            return "robot turned left";
+            return UserMessageConstants.TurnedLeft;
         }
 
         private string Right()
         {
             _robot.TurnRight();
-            return "robot turned right";
+            return UserMessageConstants.TurnedRight;
         }
 
         private string Report()
@@ -109,12 +109,12 @@ namespace ToyRobot.App.Validators
 
         private string Exit()
         {
-            return "EXIT";
+            return UserMessageConstants.Exit;
         }
 
         private string UnknownCommand()
         {
-            return "Unknown command";
+            return UserMessageConstants.UnknownCommand;
         }
     }
 }
