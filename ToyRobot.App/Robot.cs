@@ -9,6 +9,8 @@ namespace ToyRobot.App
         string Heading { get; set; }
         bool Placed { get; set; }
         string Report();
+        void TurnLeft();
+        void TurnRight();
     }
 
     public class Robot : IRobot
@@ -21,5 +23,16 @@ namespace ToyRobot.App
         {
             return $"{Position[0]},{Position[1]},{Heading}";
         }
+
+        public void TurnLeft()
+        {
+
+        }
+
+        public void TurnRight()
+        {
+
+        }
+
     }
 }

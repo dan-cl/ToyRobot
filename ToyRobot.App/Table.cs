@@ -5,7 +5,13 @@ using System.Linq;
 
 namespace ToyRobot.App
 {
-    public class Table
+    public interface ITable
+    {
+        bool Move(IRobot robot);
+        bool Place(int[] position, IRobot robot);
+    }
+
+    public class Table : ITable
     {
         private readonly int _tableSize;
 
@@ -32,7 +38,7 @@ namespace ToyRobot.App
 
             if (!ValidHeading(robot.Heading, out var moveMethodDelegate)) return false;
 
-            return moveMethodDelegate(robot);
+            return moveMethodDelegate?.Invoke(robot) ?? false;
         }
 
         public bool Place(int[] position, IRobot robot)
